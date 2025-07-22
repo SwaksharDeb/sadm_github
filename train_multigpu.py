@@ -73,9 +73,11 @@ def save_combined_middle_slices(x_gen_tensor, step, save_dir):
 
     # Select first sample and remove channel dimension
     vol = x_gen_tensor[0, 0].cpu().numpy()  # shape [128, 128, 128]
+    vol_min = vol.min()
+    vol_max = vol.max()
 
     # Normalize for visualization
-    vol = (vol - vol.min()) / (vol.max() - vol.min() + 1e-8)
+    #vol = (vol - vol.min()) / (vol.max() - vol.min() + 1e-8)
 
     # Get 64th slices
     axial = vol[64, :, :]      # XY plane
@@ -87,7 +89,7 @@ def save_combined_middle_slices(x_gen_tensor, step, save_dir):
 
     # Save the image
     save_path = os.path.join(save_dir, f"x_gen_step_{step}_combined.png")
-    plt.imsave(save_path, combined, cmap='gray')
+    plt.imsave(save_path, combined, cmap='gray', vmin=vol_min, vmax=vol_max)
 
 def create_single_gpu_model_for_sampling(vivit_model, nn_model, n_T, device):
     """Create a single GPU DDPM model for sampling"""
@@ -167,7 +169,7 @@ def train():
     
     # Create DDPM model
     ddpm = DDPM(vivit_model=vivit_model, nn_model=nn_model,
-                betas=(1e-4, 0.02), n_T=n_T, device=device, drop_prob=0.1)
+                betas=(1e-4, 0), n_T=n_T, device=device, drop_prob=0.1)   #guidance 0.02
     ddpm.to(device)
 
     # Load latest checkpoint if available    
