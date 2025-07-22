@@ -240,7 +240,7 @@ class DDPM(nn.Module):
         x_i_store = []  # keep track of generated steps in case want to plot something
         print()
         for i in range(self.n_T, 0, -1):
-            print(f'sampling timestep {i}', end='\r')
+            print(f'sampling timestep {i}')
             t_is = torch.tensor([i / self.n_T]).to(device)
             t_is = t_is.repeat(n_sample, 1, 1, 1, 1)
 
@@ -261,8 +261,8 @@ class DDPM(nn.Module):
                     + self.sqrt_beta_t[i] * z
             )
             #x_i = x_i.clip(-1,1)
-            if i % 20 == 0 or i == self.n_T or i < 8:
-                x_i_store.append(x_i.detach().cpu().numpy())
+            # if i % 20 == 0 or i == self.n_T or i < 8:
+            #     x_i_store.append(x_i.detach().cpu().numpy())
 
         x_i_store = np.array(x_i_store)
         return x_i, x_i_store
