@@ -1,0 +1,16 @@
+
+# Ignore large or generated folders
+reconstructed_images/  
+results/
+backup_results/
+data_2/
+dataset/
+data/
+sampling_visualization/
+
+# Ignore Python cache
+__pycache__/
+*.pyc
+
+# Ignore VSCode settings
+.vscode/
